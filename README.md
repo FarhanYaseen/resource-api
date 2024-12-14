@@ -24,7 +24,7 @@ A RESTful API built with TypeScript, Express, and PostgreSQL for managing tasks.
 
 1. Clone the repository:
    ```bash
-   git clone <repository-url>
+   git clone git@github.com:FarhanYaseen/resource-api.git
    cd rest-api-oppizi
    ```
 
