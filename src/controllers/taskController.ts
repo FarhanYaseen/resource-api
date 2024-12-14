@@ -3,10 +3,9 @@ import { Request, Response } from 'express';
 import { AppDataSource } from '../config/database';
 import { Task } from '../entities/Task';
 
-const taskRepository = AppDataSource.getRepository(Task);
-
 export const createTask = async (req: Request, res: Response) => {
     try {
+        const taskRepository = AppDataSource.getRepository(Task);
         const task = taskRepository.create(req.body);
         const result = await taskRepository.save(task);
         res.status(201).json(result);
@@ -15,8 +14,10 @@ export const createTask = async (req: Request, res: Response) => {
     }
 };
 
+
 export const getTasks = async (_req: Request, res: Response) => {
     try {
+        const taskRepository = AppDataSource.getRepository(Task);
         const tasks = await taskRepository.find();
         res.json(tasks);
     } catch (error) {
@@ -26,6 +27,7 @@ export const getTasks = async (_req: Request, res: Response) => {
 
 export const getTask = async (req: Request, res: Response) => {
     try {
+        const taskRepository = AppDataSource.getRepository(Task);
         const task = await taskRepository.findOne({ where: { id: req.params.id } });
         if (!task) {
             return res.status(404).json({ error: 'Task not found' });
@@ -38,14 +40,19 @@ export const getTask = async (req: Request, res: Response) => {
 
 export const updateTask = async (req: Request, res: Response) => {
     try {
+
+        const taskRepository = AppDataSource.getRepository(Task);
+
         const task = await taskRepository.findOne({ where: { id: req.params.id } });
         if (!task) {
-            return res.status(404).json({ error: 'Task not found' });
+            return res.status(404).json({ error: "Task not found" });
         }
 
-        taskRepository.merge(task, req.body);
-        const result = await taskRepository.save(task);
-        res.json(result);
+        Object.assign(task, req.body);
+
+        const updatedTask = await taskRepository.save(task);
+        res.json(updatedTask);
+
     } catch (error) {
         res.status(500).json({ error: 'Error updating task' });
     }
@@ -53,6 +60,7 @@ export const updateTask = async (req: Request, res: Response) => {
 
 export const deleteTask = async (req: Request, res: Response) => {
     try {
+        const taskRepository = AppDataSource.getRepository(Task);
         const task = await taskRepository.findOne({ where: { id: req.params.id } });
         if (!task) {
             return res.status(404).json({ error: 'Task not found' });
