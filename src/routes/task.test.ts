@@ -17,7 +17,7 @@ const mockRepository = {
     remove: jest.fn(),
 };
 
-(AppDataSource.getRepository as jest.Mock).mockReturnValue(mockRepository);
+jest.spyOn(AppDataSource, "getRepository").mockReturnValue(mockRepository as any);
 
 describe("Resource API", () => {
     beforeEach(() => {
@@ -51,8 +51,21 @@ describe("Resource API", () => {
             expect(response.body).toHaveProperty("error");
         });
 
+        it("should handle database errors", async () => {
+            const taskData = { title: "Test Task", description: "Test description", completed: false };
 
+            mockRepository.create.mockReturnValue(taskData);
+            mockRepository.save.mockRejectedValue(new Error("Database error"));
+
+            const response = await request(app)
+                .post("/resource")
+                .send(taskData);
+
+            expect(response.status).toBe(500);
+            expect(response.body).toHaveProperty("error", "Error creating task");
+        });
     });
+
 
     describe("GET /resource", () => {
         it("should retrieve all resources", async () => {
@@ -60,6 +73,7 @@ describe("Resource API", () => {
                 { id: 1, title: "Task 1", description: "Description 1", completed: false },
                 { id: 2, title: "Task 2", description: "Description 2", completed: true },
             ];
+
             mockRepository.find.mockResolvedValue(tasks);
 
             const response = await request(app).get("/resource");
@@ -82,6 +96,7 @@ describe("Resource API", () => {
     describe("GET /resource/:id", () => {
         it("should retrieve a resource by ID", async () => {
             const task = { id: 1, title: "Task 1", description: "Description 1", completed: false };
+
             mockRepository.findOne.mockResolvedValue(task);
 
             const response = await request(app).get("/resource/1");
@@ -141,6 +156,7 @@ describe("Resource API", () => {
 
         it("should handle database errors during update", async () => {
             const task = { id: 1, title: "Task 1", description: "Description 1", completed: false };
+
             mockRepository.findOne.mockResolvedValue(task);
             mockRepository.save.mockRejectedValue(new Error("Database error"));
 

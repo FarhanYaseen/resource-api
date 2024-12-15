@@ -40,16 +40,12 @@ export const getTask = async (req: Request, res: Response) => {
 
 export const updateTask = async (req: Request, res: Response) => {
     try {
-
         const taskRepository = AppDataSource.getRepository(Task);
-
         const task = await taskRepository.findOne({ where: { id: req.params.id } });
         if (!task) {
             return res.status(404).json({ error: "Task not found" });
         }
-
         Object.assign(task, req.body);
-
         const updatedTask = await taskRepository.save(task);
         res.json(updatedTask);
 
@@ -65,7 +61,6 @@ export const deleteTask = async (req: Request, res: Response) => {
         if (!task) {
             return res.status(404).json({ error: 'Task not found' });
         }
-
         await taskRepository.remove(task);
         res.status(204).send();
     } catch (error) {
