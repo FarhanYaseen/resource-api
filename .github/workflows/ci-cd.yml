@@ -32,9 +32,6 @@ jobs:
     - name: Run tests
       run: npm test
 
-    - name: Debug Transpiled Output
-      run: cat ./dist/routes/task.test.js
-
   # Build and Deploy job
   build-and-deploy:
     needs: test
