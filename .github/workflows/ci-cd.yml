@@ -31,46 +31,46 @@ jobs:
 
     - name: Run tests
       run: npm test
+build-and-deploy:
+  needs: test
+  runs-on: ubuntu-latest
+  if: github.ref == 'refs/heads/main'
 
-  # Build and Deploy job
-  build-and-deploy:
-    needs: test
-    runs-on: ubuntu-latest
-    if: github.ref == 'refs/heads/main'
+  steps:
+  - name: Checkout code
+    uses: actions/checkout@v3
 
-    steps:
-    - name: Checkout code
-      uses: actions/checkout@v3
+  - name: Exclude unnecessary files and Package code for deployment
+    run: |
+      # Exclude .git and app.tar.gz while creating the tarball
+      tar --exclude='.git' --exclude='app.tar.gz' -czvf app.tar.gz .
 
-    - name: Package code for deployment
-      run: tar -czvf app.tar.gz .
+  - name: Deploy to DigitalOcean
+    uses: appleboy/ssh-action@v0.1.8
+    with:
+      host: ${{ secrets.EC2_HOST }}
+      username: ${{ secrets.EC2_USER }}
+      key: ${{ secrets.EC2_SSH_KEY }}
+      script: |
+        # Create a deployment directory
+        mkdir -p ~/deploy
 
-    - name: Deploy to DigitalOcean
-      uses: appleboy/ssh-action@v0.1.8
-      with:
-        host: ${{ secrets.EC2_HOST }}
-        username: ${{ secrets.EC2_USER }}
-        key: ${{ secrets.EC2_SSH_KEY }}
-        script: |
-          # Create a deployment directory
-          mkdir -p ~/deploy
+        # Upload the application package
+        scp -o StrictHostKeyChecking=no app.tar.gz ${{ secrets.EC2_USER }}@${{ secrets.EC2_HOST }}:~/deploy/
 
-          # Upload the application package
-          scp -o StrictHostKeyChecking=no app.tar.gz ${{ secrets.EC2_USER }}@${{ secrets.EC2_HOST }}:~/deploy/
+        # SSH into the EC2 instance and deploy the application
+        ssh -o StrictHostKeyChecking=no ${{ secrets.EC2_USER }}@${{ secrets.EC2_HOST }} << 'EOF'
+        cd ~/deploy
+        tar -xzvf app.tar.gz
+        docker build -t ${DOCKER_IMAGE}:${GITHUB_SHA} .
 
-          # SSH into the EC2 instance and deploy the application
-          ssh -o StrictHostKeyChecking=no ${{ secrets.EC2_USER }}@${{ secrets.EC2_HOST }} << 'EOF'
-          cd ~/deploy
-          tar -xzvf app.tar.gz
-          docker build -t ${DOCKER_IMAGE}:${GITHUB_SHA} .
-          
-          # Stop and remove the existing container if it exists
-          docker stop ${DOCKER_IMAGE} || true
-          docker rm ${DOCKER_IMAGE} || true
+        # Stop and remove the existing container if it exists
+        docker stop ${DOCKER_IMAGE} || true
+        docker rm ${DOCKER_IMAGE} || true
 
-          # Run the new container
-          docker run -d --name ${DOCKER_IMAGE} \
-            -p ${PORT}:${PORT} \
-            --env-file .env \
-            ${DOCKER_IMAGE}:${GITHUB_SHA}
-          EOF
+        # Run the new container
+        docker run -d --name ${DOCKER_IMAGE} \
+          -p ${PORT}:${PORT} \
+          --env-file .env \
+          ${DOCKER_IMAGE}:${GITHUB_SHA}
+        EOF
