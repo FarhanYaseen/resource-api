@@ -41,37 +41,57 @@ jobs:
     - name: Checkout code
       uses: actions/checkout@v3
 
-    - name: Exclude unnecessary files and Package code for deployment
+    - name: Create deployment package
       run: |
-        # Exclude .git and app.tar.gz while creating the tarball
-        tar --exclude='.git' --exclude='app.tar.gz' -czvf app.tar.gz .
+        # Create a temporary directory for the files we want to include
+        mkdir deploy_package
+        
+        # Copy necessary files while excluding unwanted ones
+        rsync -av --progress ./ deploy_package/ \
+          --exclude '.git' \
+          --exclude 'node_modules' \
+          --exclude '.github' \
+          --exclude 'deploy_package' \
+          --exclude 'app.tar.gz'
+        
+        # Create the tarball from the clean directory
+        cd deploy_package && tar -czf ../app.tar.gz .
 
-    - name: Deploy to DigitalOcean
+    - name: Deploy to Server
       uses: appleboy/ssh-action@v0.1.8
       with:
         host: ${{ secrets.EC2_HOST }}
         username: ${{ secrets.EC2_USER }}
         key: ${{ secrets.EC2_SSH_KEY }}
         script: |
-          # Create a deployment directory
-          mkdir -p ~/deploy
+          # Create a deployment directory with timestamp
+          DEPLOY_DIR=~/deploy/$(date +%Y%m%d_%H%M%S)
+          mkdir -p $DEPLOY_DIR
+          cd $DEPLOY_DIR
 
-          # Upload the application package
-          scp -o StrictHostKeyChecking=no app.tar.gz ${{ secrets.EC2_USER }}@${{ secrets.EC2_HOST }}:~/deploy/
+          # Clean up old deployment directories, keeping the last 5
+          cd ~/deploy && ls -1t | tail -n +6 | xargs -r rm -rf
 
-          # SSH into the EC2 instance and deploy the application
-          ssh -o StrictHostKeyChecking=no ${{ secrets.EC2_USER }}@${{ secrets.EC2_HOST }} << 'EOF'
-          cd ~/deploy
-          tar -xzvf app.tar.gz
+          # Copy the deployment package
+          echo "Copying deployment package..."
+          scp app.tar.gz $DEPLOY_DIR/
+          
+          # Extract and build
+          cd $DEPLOY_DIR
+          tar -xzf app.tar.gz
           docker build -t ${DOCKER_IMAGE}:${GITHUB_SHA} .
 
-          # Stop and remove the existing container if it exists
+          # Stop and remove existing container
           docker stop ${DOCKER_IMAGE} || true
           docker rm ${DOCKER_IMAGE} || true
 
-          # Run the new container
+          # Run new container
           docker run -d --name ${DOCKER_IMAGE} \
             -p ${PORT}:${PORT} \
             --env-file .env \
             ${DOCKER_IMAGE}:${GITHUB_SHA}
-          EOF
+
+          # Clean up old images, keeping the last 3
+          docker images ${DOCKER_IMAGE} --format "{{.ID}} {{.CreatedAt}}" | \
+            sort -k 2 -r | tail -n +4 | awk '{print $1}' | \
+            xargs -r docker rmi
