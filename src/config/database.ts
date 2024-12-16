@@ -18,10 +18,23 @@ export const AppDataSource = new DataSource({
     subscribers: [],
 });
 
-AppDataSource.initialize()
-    .then(() => {
-        console.log('Data Source has been initialized!');
-    })
-    .catch((err) => {
-        console.error('Error during Data Source initialization', err);
-    });
+
+if (process.env.NODE_ENV !== 'test') {
+    AppDataSource.initialize()
+        .then(() => {
+            console.log('Data Source has been initialized!');
+        })
+        .catch((err) => {
+            console.error('Error during Data Source initialization', err);
+        });
+}
+
+if (process.env.NODE_ENV !== 'test') {
+    AppDataSource.initialize()
+        .then(() => {
+            console.log('Data Source has been initialized!');
+        })
+        .catch((err) => {
+            console.error('Error during Data Source initialization', err);
+        });
+}
