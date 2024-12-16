@@ -17,7 +17,8 @@ const mockRepository = {
     remove: jest.fn(),
 };
 
-jest.spyOn(AppDataSource, "getRepository").mockReturnValue(mockRepository as unknown as any);
+const mockedRepo = mockRepository as unknown as any;
+jest.spyOn(AppDataSource, "getRepository").mockReturnValue(mockedRepo);
 
 describe("Resource API", () => {
     beforeEach(() => {
