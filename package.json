@@ -2,8 +2,8 @@
   "name": "resource-api",
   "version": "1.0.0",
   "main": "dist/server.js",
-  "type": "module",
-  "scripts": {
+  "type": "commonjs",
+    "scripts": {
     "start": "node dist/server.js",
     "dev": "ts-node-dev --respawn src/server.ts",
     "build": "tsc",
