@@ -1,22 +1,10 @@
 {
+    "extends": "./tsconfig.json",
     "compilerOptions": {
-      "target": "es2018",
-      "module": "commonjs",
-      "outDir": "./dist",
-      "rootDir": "./src",
-      "strict": false,
-      "allowJs": true,
-      "resolveJsonModule": true,
-      "esModuleInterop": true,
-      "skipLibCheck": true,
-      "forceConsistentCasingInFileNames": true,
-      "experimentalDecorators": true,
-      "emitDecoratorMetadata": true,
-      "strictPropertyInitialization": false,
-      "allowSyntheticDefaultImports": true
-  
+      "rootDir": ".",
+      "outDir": "./build"
     },
-    "include": ["src/**/*", "tests/**/*", "**/*.spec.ts"],
+    "include": ["src/**/*.ts", "tests/**/*.ts", "**/*.spec.ts"],
     "exclude": ["node_modules"]
   }
   
