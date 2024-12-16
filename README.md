@@ -25,7 +25,7 @@ A RESTful API built with TypeScript, Express, and PostgreSQL for managing tasks.
 1. Clone the repository:
    ```bash
    git clone git@github.com:FarhanYaseen/resource-api.git
-   cd rest-api-oppizi
+   cd resource-api
    ```
 
 2. Create environment file:
@@ -120,7 +120,7 @@ The project uses Docker Compose to run multiple services:
 
 Key environment variables:
 
-- `PORT`: API port (default: 3000)
+- `PORT`: API port (default: 3001)
 - `DB_HOST`: Database host
 - `DB_PORT`: Database port
 - `DB_USERNAME`: Database username

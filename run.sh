@@ -3,7 +3,7 @@
 set -e
 
 # Configuration
-COMPOSE_PROJECT_NAME="rest-api-oppizi"
+COMPOSE_PROJECT_NAME="resource-api"
 ENV_FILE=".env"
 
 # Color codes for output
@@ -38,7 +38,7 @@ log "Waiting for database to be ready..."
 docker-compose ps | grep -q "db" || error "Database service is not running"
 
 log "Waiting for the API to be ready..."
-HEALTH_CHECK_URL="http://localhost:${PORT:-3000}/health"
+HEALTH_CHECK_URL="http://localhost:${PORT:-3001}/health"
 MAX_RETRIES=12
 RETRY_COUNT=0
 
@@ -53,7 +53,7 @@ if [ $RETRY_COUNT -eq $MAX_RETRIES ]; then
 fi
 
 log "Services are up and running!"
-log "API is available at http://localhost:${PORT:-3000}"
+log "API is available at http://localhost:${PORT:-3001}"
 log "Database is available at localhost:${DB_PORT:-5432}"
 log ""
 log "You can check logs with: docker-compose logs -f"
