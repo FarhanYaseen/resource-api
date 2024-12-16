@@ -2,6 +2,7 @@ import request from "supertest";
 import express from "express";
 import ResourceRouter from "../routes/taskRoutes";
 import { AppDataSource } from "../config/database";
+import { Repository } from "typeorm";
 
 jest.mock("../config/database");
 
@@ -17,7 +18,8 @@ const mockRepository = {
     remove: jest.fn(),
 };
 
-const mockedRepo = mockRepository as unknown as any;
+const mockedRepo = mockRepository as unknown as Repository<any>;
+jest.spyOn(AppDataSource, "getRepository").mockReturnValue(mockedRepo);
 jest.spyOn(AppDataSource, "getRepository").mockReturnValue(mockedRepo);
 
 describe("Resource API", () => {
