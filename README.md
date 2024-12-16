@@ -95,20 +95,6 @@ All endpoints are prefixed with `/tasks`
 - Method: `DELETE`
 - Path: `/tasks/:id`
 
-## Database Management
-
-### Migrations
-
-Generate a new migration:
-```bash
-npm run migration:generate -- src/migrations/MigrationName
-```
-
-Run migrations:
-```bash
-npm run migration:run
-```
-
 ## Docker Setup
 
 The project uses Docker Compose to run multiple services:
