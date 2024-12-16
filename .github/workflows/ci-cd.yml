@@ -62,7 +62,7 @@ jobs:
       with:
         host: ${{ secrets.EC2_HOST }}
         username: ${{ secrets.EC2_USER }}
-        key: ${{ secrets.EC2_SSH_KEY }}
+        password: ${{ secrets.EC2_SSH_KEY }}
         script: |
           # Create a deployment directory with timestamp
           DEPLOY_DIR=~/deploy/$(date +%Y%m%d_%H%M%S)
