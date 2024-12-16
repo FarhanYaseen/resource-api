@@ -12,7 +12,9 @@
     "forceConsistentCasingInFileNames": true,
     "experimentalDecorators": true,
     "emitDecoratorMetadata": true,
-    "strictPropertyInitialization": false
+    "strictPropertyInitialization": false,
+    "allowSyntheticDefaultImports": true
+
   },
   "include": ["src/**/*", "tests/**/*", "**/*.spec.ts"],
   "exclude": ["node_modules"]

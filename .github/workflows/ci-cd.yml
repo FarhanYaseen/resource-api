@@ -11,7 +11,6 @@ env:
   PORT: 3001
 
 jobs:
-  # Test job
   test:
     runs-on: ubuntu-latest
 
@@ -27,11 +26,14 @@ jobs:
     - name: Install dependencies
       run: npm ci
 
+    - name: Build TypeScript
+      run: npm run build
+
     - name: Run tests
       run: npm test
 
-    - name: Upload test coverage
-      uses: codecov/codecov-action@v3
+    - name: Debug Transpiled Output
+      run: cat ./dist/routes/task.test.js
 
   # Build and Deploy job
   build-and-deploy:
