@@ -30,7 +30,7 @@ ENV NODE_ENV=production
 EXPOSE 3001
 
 # Start the application
-CMD ["npm", "start"]
+CMD [ "node", "dist/server.js" ]
 
 # Healthcheck for container
 HEALTHCHECK --interval=30s --timeout=10s --start-period=5s --retries=3 \
