@@ -29,6 +29,8 @@ export const AppDataSource = new DataSource({
 if (process.env.NODE_ENV !== 'test') {
     AppDataSource.initialize()
         .then(() => {
+            const metadata = AppDataSource.getMetadata(Task);
+            console.log('Task metadata:', metadata);
             console.log('Data Source has been initialized!');
         })
         .catch((err) => {
