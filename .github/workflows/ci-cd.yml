@@ -34,7 +34,6 @@ jobs:
 
       - name: Run tests
         run: npm test
-
   deploy:
     needs: test
     runs-on: ubuntu-latest
@@ -54,6 +53,13 @@ jobs:
       - name: Build application
         run: npm run build
 
+      - name: Debug environment
+        run: |
+          echo "Node version: $(node -v)"
+          echo "NPM version: $(npm -v)"
+          echo "Working directory: $(pwd)"
+          ls -la
+
       - name: Deploy to Vercel
         uses: amondnet/vercel-action@v20
         with:
@@ -61,3 +67,4 @@ jobs:
           vercel-team: ${{ secrets.VERCEL_TEAM }}
           working-directory: ./
           vercel-args: '--prod'
+          debug: true
