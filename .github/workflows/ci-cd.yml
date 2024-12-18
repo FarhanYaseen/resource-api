@@ -6,13 +6,6 @@ on:
   pull_request:
     branches: [main, feature/vercel]
 
-env:
-  PORT: 3001
-  DB_PORT: 5432
-  DB_USERNAME: postgres
-  DB_PASSWORD: postgres
-  DB_DATABASE: task_db
-
 jobs:
   test:
     runs-on: ubuntu-latest
@@ -69,5 +62,6 @@ jobs:
           VERCEL_TOKEN: ${{ secrets.VERCEL_TOKEN }}
           VERCEL_PROJECT_ID: ${{ secrets.VERCEL_PROJECT_ID }}
           VERCEL_ORG_ID: ${{ secrets.VERCEL_ORG_ID }}
+          DATABASE_URL: ${{ secrets.DATABASE_URL }}
         run: |
-          vercel --token $VERCEL_TOKEN --yes --prod
+          vercel --token $VERCEL_TOKEN --yes --prod --env DATABASE_URL=$DATABASE_URL
