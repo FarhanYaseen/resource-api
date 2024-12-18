@@ -72,3 +72,4 @@ jobs:
           --yes \
           --name vercel-app \
           --env IMAGE_URL=${{ secrets.DOCKER_USERNAME }}/vercel-app:latest
+          --build-output dist
