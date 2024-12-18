@@ -11,6 +11,7 @@ if (!databaseUrl) {
     process.exit(1);
 }
 
+console.log({databaseUrl})
 export const AppDataSource = new DataSource({
     type: 'postgres',
     url: databaseUrl,
