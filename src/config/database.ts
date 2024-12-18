@@ -23,6 +23,8 @@ export const AppDataSource = new DataSource({
     ssl: process.env.DATABASE_SSL === 'true' ? { rejectUnauthorized: false } : undefined,
     extra: {
         connectionTimeoutMillis: 30000,
+        idleTimeoutMillis: 30000,
+        keepAlive: true,
     },
 });
 
