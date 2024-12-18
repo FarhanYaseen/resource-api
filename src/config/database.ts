@@ -1,6 +1,6 @@
 import 'reflect-metadata';
 import { DataSource } from 'typeorm';
-import { Task } from '../entities/Task'; 
+import { Task } from '../entities/Task';
 import dotenv from 'dotenv';
 
 dotenv.config();
@@ -11,20 +11,16 @@ if (!databaseUrl) {
     process.exit(1);
 }
 
-console.log({databaseUrl})
 export const AppDataSource = new DataSource({
     type: 'postgres',
     url: databaseUrl,
     synchronize: true,
     logging: true,
-    entities: [Task], 
+    entities: [Task],
     migrations: [],
     subscribers: [],
-    ssl: process.env.DATABASE_SSL == 'true' ? { rejectUnauthorized: false } : undefined,
-    extra: {
-        connectionTimeoutMillis: 30000,
-        idleTimeoutMillis: 30000,
-        keepAlive: true,
+    ssl: {
+        rejectUnauthorized: false,
     },
 });
 
