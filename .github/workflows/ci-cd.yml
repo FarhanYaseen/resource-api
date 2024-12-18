@@ -2,9 +2,9 @@ name: Vercel Deployment with Docker
 
 on:
   push:
-    branches: [main]
+    branches: [main, feature/dockerfile]
   pull_request:
-    branches: [main]
+    branches: [main, feature/dockerfile]
 
 
 jobs:
