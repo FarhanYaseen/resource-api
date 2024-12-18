@@ -4,20 +4,18 @@ import dotenv from 'dotenv';
 
 dotenv.config();
 
+const isDevelopment = process.env.NODE_ENV === 'development';
+
 export const AppDataSource = new DataSource({
     type: 'postgres',
-    host: process.env.DB_HOST,
-    port: parseInt(process.env.DB_PORT || '5432'),
-    username: process.env.DB_USERNAME || 'postgres',
-    password: process.env.DB_PASSWORD || 'postgres',
-    database: process.env.DB_DATABASE || 'postgres',
-    synchronize: process.env.NODE_ENV === 'development',
-    logging: process.env.NODE_ENV === 'development',
+    url: process.env.DATABASE_URL,
+    synchronize: isDevelopment,
+    logging: isDevelopment,
     entities: [Task],
     migrations: [],
     subscribers: [],
+    ssl: process.env.DATABASE_SSL === 'true' ? { rejectUnauthorized: false } : false,
 });
-
 
 if (process.env.NODE_ENV !== 'test') {
     AppDataSource.initialize()
