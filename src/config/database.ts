@@ -4,22 +4,18 @@ import dotenv from 'dotenv';
 
 dotenv.config();
 
-const isDevelopment = process.env.NODE_ENV === 'development';
-
 const databaseUrl = process.env.DATABASE_URL;
 if (!databaseUrl) {
     console.error("DATABASE_URL is not defined");
     process.exit(1);
 }
 
-console.log("Database URL:", databaseUrl);
-console.log("SSL Enabled:", process.env.DATABASE_SSL);
 
 export const AppDataSource = new DataSource({
     type: 'postgres',
     url: databaseUrl,
-    synchronize: isDevelopment,
-    logging: isDevelopment,
+    synchronize: true,
+    logging: true,
     entities: [Task],
     migrations: [],
     subscribers: [],
