@@ -64,7 +64,7 @@ jobs:
           VERCEL_ORG_ID: ${{ secrets.VERCEL_ORG_ID }}
         run: |
           echo "Listing current deployments..."
-          vercel list $VERCEL_PROJECT_ID --token $VERCEL_TOKEN
+          vercel list $VERCEL_PROJECT_ID --token $VERCEL_TOKEN --yes
           
           echo "Removing old deployments..."
           vercel remove $VERCEL_PROJECT_ID --token $VERCEL_TOKEN --yes || true
