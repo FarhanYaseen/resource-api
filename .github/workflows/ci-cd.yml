@@ -57,10 +57,28 @@ jobs:
       - name: Install Vercel CLI
         run: npm install --global vercel@latest
 
+      - name: List and remove old deployments
+        env:
+          VERCEL_TOKEN: ${{ secrets.VERCEL_TOKEN }}
+          VERCEL_PROJECT_ID: ${{ secrets.VERCEL_PROJECT_ID }}
+          VERCEL_ORG_ID: ${{ secrets.VERCEL_ORG_ID }}
+        run: |
+          # List all deployments
+          echo "Listing current deployments..."
+          DEPLOYMENTS=$(vercel ls --token $VERCEL_TOKEN -p $VERCEL_PROJECT_ID)
+          
+          # Remove old deployments
+          echo "Removing old deployments..."
+          vercel remove $VERCEL_PROJECT_ID --token $VERCEL_TOKEN --yes || true
+
       - name: Deploy to Vercel
         env:
           VERCEL_TOKEN: ${{ secrets.VERCEL_TOKEN }}
           VERCEL_PROJECT_ID: ${{ secrets.VERCEL_PROJECT_ID }}
           VERCEL_ORG_ID: ${{ secrets.VERCEL_ORG_ID }}
         run: |
-          vercel --token $VERCEL_TOKEN --yes --prod --env DATABASE_URL=${{ secrets.DATABASE_URL }} --env NODE_ENV=production --env NODE_ENV=production --env DATABASE_SSL=true
+          vercel deploy --token $VERCEL_TOKEN --prod \
+            --env DATABASE_URL=${{ secrets.DATABASE_URL }} \
+            --env NODE_ENV=production \
+            --env DATABASE_SSL=true \
+            --yes
