@@ -1,5 +1,5 @@
+import 'reflect-metadata';
 import { DataSource } from 'typeorm';
-import { Task } from '../entities/Task';
 import dotenv from 'dotenv';
 
 dotenv.config();
@@ -16,7 +16,7 @@ export const AppDataSource = new DataSource({
     url: databaseUrl,
     synchronize: true,
     logging: true,
-    entities: [Task],
+    entities: [__dirname + '/../entities/*.{ts,js}'],
     migrations: [],
     subscribers: [],
     ssl: process.env.DATABASE_SSL === 'true' ? { rejectUnauthorized: false } : undefined, 
