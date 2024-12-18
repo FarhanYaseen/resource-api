@@ -20,7 +20,7 @@ export const AppDataSource = new DataSource({
     entities: [Task], 
     migrations: [],
     subscribers: [],
-    ssl: process.env.DATABASE_SSL === 'true' ? { rejectUnauthorized: false } : undefined,
+    ssl: process.env.DATABASE_SSL == 'true' ? { rejectUnauthorized: false } : undefined,
     extra: {
         connectionTimeoutMillis: 30000,
         idleTimeoutMillis: 30000,
