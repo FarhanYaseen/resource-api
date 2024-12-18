@@ -12,15 +12,18 @@ if (!databaseUrl) {
     process.exit(1);
 }
 
+console.log("Database URL:", databaseUrl);
+console.log("SSL Enabled:", process.env.DATABASE_SSL);
+
 export const AppDataSource = new DataSource({
     type: 'postgres',
-    url: process.env.DATABASE_URL,
+    url: databaseUrl,
     synchronize: isDevelopment,
     logging: isDevelopment,
     entities: [Task],
     migrations: [],
     subscribers: [],
-    ssl: process.env.DATABASE_SSL === 'true' ? { rejectUnauthorized: false } : false,
+    ssl: process.env.DATABASE_SSL === 'true' ? { rejectUnauthorized: false } : undefined, 
 });
 
 if (process.env.NODE_ENV !== 'test') {
@@ -29,6 +32,7 @@ if (process.env.NODE_ENV !== 'test') {
             console.log('Data Source has been initialized!');
         })
         .catch((err) => {
-            console.error('Error during Data Source initialization', err);
+            console.error('Error during Data Source initialization:', err.message);
+            console.error(err.stack);
         });
 }
