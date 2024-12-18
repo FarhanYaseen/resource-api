@@ -69,5 +69,6 @@ jobs:
         run: |
           vercel --prod --token $VERCEL_TOKEN \
           --scope ${{ secrets.VERCEL_TEAM }} \
+          --yes \
           --name vercel-app \
           --env IMAGE_URL=${{ secrets.DOCKER_USERNAME }}/vercel-app:latest
