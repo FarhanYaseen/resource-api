@@ -9,10 +9,7 @@ services:
       NODE_ENV: ${NODE_ENV}
       PORT: ${PORT}
       DB_HOST: db
-      DB_PORT: ${DB_PORT}
-      DB_USERNAME: ${DB_USERNAME}
-      DB_PASSWORD: ${DB_PASSWORD}
-      DB_DATABASE: ${DB_DATABASE}
+      DATABASE_URL: postgresql://postgres:postgres@db:${DB_PORT}/task_db
     depends_on:
       - db
     volumes:
@@ -24,13 +21,13 @@ services:
     ports:
       - "${DB_PORT}:5432"
     environment:
-      POSTGRES_USER: ${DB_USERNAME}
-      POSTGRES_PASSWORD: ${DB_PASSWORD}
-      POSTGRES_DB: ${DB_DATABASE}
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_DB: task_db
     volumes:
       - postgres_data:/var/lib/postgresql/data
     healthcheck:
-      test: ["CMD", "pg_isready", "-U", "${DB_USERNAME}"]
+      test: ["CMD", "pg_isready", "-U", "postgres"]
       interval: 30s
       timeout: 10s
       retries: 5
