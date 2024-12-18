@@ -6,6 +6,12 @@ dotenv.config();
 
 const isDevelopment = process.env.NODE_ENV === 'development';
 
+const databaseUrl = process.env.DATABASE_URL;
+if (!databaseUrl) {
+    console.error("DATABASE_URL is not defined");
+    process.exit(1);
+}
+
 export const AppDataSource = new DataSource({
     type: 'postgres',
     url: process.env.DATABASE_URL,

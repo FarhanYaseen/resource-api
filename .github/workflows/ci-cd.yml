@@ -52,6 +52,7 @@ jobs:
           echo "Node version: $(node -v)"
           echo "NPM version: $(npm -v)"
           echo "Working directory: $(pwd)"
+          printenv | grep DATABASE_URL
           ls -la
 
       - name: Install Vercel CLI
@@ -62,6 +63,5 @@ jobs:
           VERCEL_TOKEN: ${{ secrets.VERCEL_TOKEN }}
           VERCEL_PROJECT_ID: ${{ secrets.VERCEL_PROJECT_ID }}
           VERCEL_ORG_ID: ${{ secrets.VERCEL_ORG_ID }}
-          DATABASE_URL: ${{ secrets.DATABASE_URL }}
         run: |
-          vercel --token $VERCEL_TOKEN --yes --prod --env DATABASE_URL=$DATABASE_URL
+          vercel --token $VERCEL_TOKEN --yes --prod --env DATABASE_URL=${{ secrets.DATABASE_URL }}
