@@ -16,10 +16,10 @@ export class Task {
     completed!: boolean;
 
     @CreateDateColumn()
-    updatedAt!: Date;
+    createdAt!: Date;
 
     @UpdateDateColumn()
-    createdAt!: Date;
+    updatedAt!: Date;
 
     constructor() {
         if (!this.id) {

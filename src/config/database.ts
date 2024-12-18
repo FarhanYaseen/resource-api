@@ -20,6 +20,9 @@ export const AppDataSource = new DataSource({
     migrations: [],
     subscribers: [],
     ssl: process.env.DATABASE_SSL === 'true' ? { rejectUnauthorized: false } : undefined,
+    extra: {
+        connectionTimeoutMillis: 10000,
+    },
 });
 
 if (process.env.NODE_ENV !== 'test') {
