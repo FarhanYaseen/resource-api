@@ -1,9 +1,10 @@
 import 'reflect-metadata';
-import { Entity, PrimaryGeneratedColumn, Column, CreateDateColumn, UpdateDateColumn } from 'typeorm';
+import { Entity, PrimaryColumn, Column, CreateDateColumn, UpdateDateColumn } from 'typeorm';
+import { v4 as uuidv4 } from 'uuid';
 
 @Entity('tasks')
 export class Task {
-    @PrimaryGeneratedColumn('uuid')
+    @PrimaryColumn('uuid')
     id!: string;
 
     @Column()
@@ -20,4 +21,10 @@ export class Task {
 
     @UpdateDateColumn()
     updatedAt!: Date;
+    
+    constructor() {
+        if (!this.id) {
+            this.id = uuidv4();
+        }
+    }
 };
