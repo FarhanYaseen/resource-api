@@ -1,4 +1,3 @@
-import 'reflect-metadata';
 import { Entity, PrimaryColumn, Column, CreateDateColumn, UpdateDateColumn } from 'typeorm';
 import { v4 as uuidv4 } from 'uuid';
 
@@ -17,14 +16,14 @@ export class Task {
     completed!: boolean;
 
     @CreateDateColumn()
-    createdAt!: Date;
+    updatedAt!: Date;
 
     @UpdateDateColumn()
-    updatedAt!: Date;
-    
+    createdAt!: Date;
+
     constructor() {
         if (!this.id) {
             this.id = uuidv4();
         }
     }
-};
+}
