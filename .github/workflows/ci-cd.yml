@@ -2,9 +2,9 @@ name: CI/CD for Vercel
 
 on:
   push:
-    branches: [main, feature/vercel]
+    branches: [main, feature/sequelize]
   pull_request:
-    branches: [main, feature/vercel]
+    branches: [main, feature/sequelize]
 
 jobs:
   test:
