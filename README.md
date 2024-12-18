@@ -1,11 +1,11 @@
-# Task Management API
+# Resource Management API
 
-A RESTful API built with TypeScript, Express, and PostgreSQL for managing tasks. This project includes Docker containerization, automated deployment, and a CI/CD pipeline.
+A RESTful API built with TypeScript, Express, and PostgreSQL for managing Resource. This project includes Docker containerization, automated deployment, and a CI/CD pipeline.
 
 ## Features
 
-- RESTful API endpoints for CRUD operations on tasks
-- PostgreSQL database with TypeORM
+- RESTful API endpoints for CRUD operations on Resource
+- PostgreSQL database with Sequelize
 - Input validation using Joi
 - Docker containerization with Docker Compose
 - Environment-based configuration
@@ -58,11 +58,11 @@ This will start the application with hot-reload enabled.
 
 ## API Endpoints
 
-All endpoints are prefixed with `/tasks`
+All endpoints are prefixed with `/resource`
 
-### Create Task
+### Create Resource
 - Method: `POST`
-- Path: `/tasks`
+- Path: `/resource`
 - Body:
   ```json
   {
@@ -72,17 +72,17 @@ All endpoints are prefixed with `/tasks`
   }
   ```
 
-### Get All Tasks
+### Get All Resource
 - Method: `GET`
-- Path: `/tasks`
+- Path: `/resource`
 
-### Get Single Task
+### Get Single Resource
 - Method: `GET`
-- Path: `/tasks/:id`
+- Path: `/resource/:id`
 
-### Update Task
+### Update Resource
 - Method: `PUT`
-- Path: `/tasks/:id`
+- Path: `/resource/:id`
 - Body:
   ```json
   {
@@ -91,9 +91,9 @@ All endpoints are prefixed with `/tasks`
   }
   ```
 
-### Delete Task
+### Delete Resource
 - Method: `DELETE`
-- Path: `/tasks/:id`
+- Path: `/resource/:id`
 
 ## Docker Setup
 
@@ -112,6 +112,8 @@ Key environment variables:
 - `DB_USERNAME`: Database username
 - `DB_PASSWORD`: Database password
 - `DB_DATABASE`: Database name
+- `DATABASE_URL`: Full database connection URL
+- `SSL_DISABLED`: For running with local db without ssl
 
 ## Testing
 
@@ -146,14 +148,29 @@ The application can be deployed using the following methods:
 
 The GitHub Actions workflow will automatically:
 1. Run tests
-2. Build Docker images
-3. Push to container registry
-4. Deploy to the target environment
+2. Build
+3. Deploy to the Vercel
 
 Required secrets:
-- `AWS_ACCESS_KEY_ID`
-- `AWS_SECRET_ACCESS_KEY`
-- `DB_PASSWORD`
+
+
+- `NODE_ENV`
+- `PORT`
+- `SSL_DISABLED`
+- `DATABASE_URL`
+
+### Setting Up Secrets in GitHub
+1. Navigate to Repository Settings:
+
+2. Go to your GitHub repository.
+Click on the Settings tab.
+3. Add Secrets:
+
+4. On the left-hand menu, select Secrets and variables > Actions.
+Click New repository secret.
+5. Add a name for the secret (e.g., NODE_ENV, PORT, DATABASE_URL).
+Enter the value of the secret.
+Click Add secret.
 
 ## Troubleshooting
 
@@ -179,7 +196,7 @@ Required secrets:
 
 ## Development Decisions
 
-1. **TypeORM**: Chosen for its TypeScript support and robust features
+1. **Sequelize**: Chosen for its TypeScript support and ORM features
 2. **PostgreSQL**: Used for reliable, relational data storage
 3. **Docker Compose**: Enables easy development and deployment setup
 4. **Environment Configuration**: Uses dotenv for flexible configuration
