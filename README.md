@@ -172,6 +172,9 @@ Click New repository secret.
 Enter the value of the secret.
 Click Add secret.
 
+## Postman Collection 
+Import `postman.json` in Postman for using the REST-API.
+
 ## Troubleshooting
 
 ### Common Issues
