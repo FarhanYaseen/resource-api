@@ -52,7 +52,6 @@ jobs:
           echo "Node version: $(node -v)"
           echo "NPM version: $(npm -v)"
           echo "Working directory: $(pwd)"
-          printenv | grep DATABASE_URL
           ls -la
 
       - name: Install Vercel CLI
