@@ -21,7 +21,7 @@ export const AppDataSource = new DataSource({
     subscribers: [],
     ssl: process.env.DATABASE_SSL === 'true' ? { rejectUnauthorized: false } : undefined,
     extra: {
-        connectionTimeoutMillis: 10000,
+        connectionTimeoutMillis: 30000,
     },
 });
 
