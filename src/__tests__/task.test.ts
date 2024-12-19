@@ -3,7 +3,6 @@ import express from "express";
 import { createTask, getTasks, getTask, updateTask, deleteTask } from "../controllers/taskController";
 import { Model, DataTypes } from 'sequelize';
 
-// Mock Sequelize
 jest.mock('sequelize', () => {
     const mSequelize = {
         Model: class {
@@ -22,7 +21,6 @@ jest.mock('sequelize', () => {
     return mSequelize;
 });
 
-// Mock Task model
 jest.mock('../models/Task', () => {
     return {
         Task: {
@@ -33,7 +31,6 @@ jest.mock('../models/Task', () => {
     };
 });
 
-// Mock database connection
 jest.mock('../config/database', () => ({
     sequelize: {
         authenticate: jest.fn(),
@@ -42,10 +39,8 @@ jest.mock('../config/database', () => ({
     }
 }));
 
-// Import Task after mocking
 import { Task } from '../models/Task';
 
-// Mock Express App
 const app = express();
 app.use(express.json());
 app.post("/tasks", createTask);
@@ -194,7 +189,6 @@ describe("Tasks API", () => {
 
             const updateData = { title: "Updated Task" };
 
-            // Mock the update to modify the task in place
             existingTask.update.mockImplementation(async function (data) {
                 Object.assign(this, data);
                 return this;

@@ -2,7 +2,6 @@
 
 set -e
 
-# Configuration
 COMPOSE_PROJECT_NAME="resource-api"
 ENV_FILE=".env"
 
